@@ -155,7 +155,14 @@
         $("again").onclick = () => { $("quiz").hidden = true; $("home").hidden = false; renderStats(); };
         return;
       }
-      const q = queue[i];
+      const raw = queue[i];
+      const order = shuffle(raw.choices.map((_, idx) => idx));
+      const q = {
+        ...raw,
+        choices: order.map(idx => raw.choices[idx]),
+        a: order.indexOf(raw.a)
+      };
+      queue[i] = q;
       $("quiz").innerHTML = `
         <div class="meta">${CATEGORIES[q.cat] || q.cat} · ${i + 1} of ${queue.length}</div>
         <div class="q">${q.q}</div>
